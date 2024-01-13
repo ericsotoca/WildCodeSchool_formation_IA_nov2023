@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Système de Recommandation de Films</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- jQuery UI CSS pour l'auto-complétion -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <!-- Slick Carousel CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css"/>
+  <!-- Style personnalisé -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #000; /* Fond noir */
+      color: #fff; /* Texte blanc */
+    }
+    .container {
+      margin-top: 1rem; /* Réduit l'espace en haut du conteneur principal */
+    }
+    .custom-card .card-body {
+      padding: 1rem;
+      padding-bottom: 0.25rem; /* Réduit l'espace en bas */
+    }
+    .form-control {
+      background-color: #333;
+      border: none;
+      color: #fff;
+    }
+    .btn-full-width {
+      width: 100%; /* Rend le bouton aussi large que son conteneur */
+      box-sizing: border-box; /* Assure que la largeur inclut les bordures et le padding */
+    }
+    .btn-primary {
+      background-color: #e50914;
+      border: none;
+    }
+    .card {
+      background-color: #333;
+      border: none;
+      max-height: 200px; /* Ajustez pour diminuer la hauteur des cartes */
+    }
+    .card-title {
+      font-size: 1.2rem;
+    }
+    .card-body {
+      padding: 15px;
+    }
+    .legend {
+      color: #999; /* Couleur grise pour la légende */
+      font-size: 0.9rem; /* Petite taille de police */
+    }
+    .light-theme {
+      background-color: #fff; /* Fond blanc */
+      color: #000; /* Texte noir */  
+    }
+	
+	.carousel img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    }
+	
+	.carousel, .carousel .slick-list, .carousel .slick-track {
+    height: 200px;
+    }
+
+	.carousel .slick-slide {
+		height: 200px;
+	}
+
+	.carousel, 
+	}
+	.footer {
+    background-color: #000;
+    color: #fff;
+  } 
+
+
+  </style>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">Mode Jour/Nuit</button>
+
+<div class="container">
+  <div class="row">
+    <!-- Colonne pour le logo -->
+    <div class="col-md-4 d-flex align-items-center">
+      <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="max-width: 100%; height: auto;">
+      </a>
+    </div>
+    <!-- Colonne pour le texte et le bandeau image -->
+    <div class="col-md-8">
+      <div>
+        <h1><BR>Système de Recommandation de Films</h1>
+        <p>🌟 Découvrez les films faits pour vous : les plus populaires et les mieux notés, sélectionnés selon vos goûts. Prêts pour le coup de cœur ? 🎬✨</p>
+      </div>
+      <div class="carousel">
+        <!-- Images pour le carrousel -->
+        <div><img src="{{ url_for('static', filename='img1.png') }}" alt="Image 1"></div>
+        <div><img src="{{ url_for('static', filename='img2.png') }}" alt="Image 2"></div>
+        <div><img src="{{ url_for('static', filename='img3.png') }}" alt="Image 3"></div>
+        <div><img src="{{ url_for('static', filename='img4.png') }}" alt="Image 4"></div>
+        <div><img src="{{ url_for('static', filename='img5.png') }}" alt="Image 5"></div>
+        <div><img src="{{ url_for('static', filename='img6.png') }}" alt="Image 6"></div>		        
+        <div><img src="{{ url_for('static', filename='img7.png') }}" alt="Image 7"></div>
+        <div><img src="{{ url_for('static', filename='img8.png') }}" alt="Image 8"></div>
+        <div><img src="{{ url_for('static', filename='img9.png') }}" alt="Image 9"></div>	
+        <div><img src="{{ url_for('static', filename='img10.png') }}" alt="Image 10"></div>
+		<div><img src="{{ url_for('static', filename='img11.png') }}" alt="Image 11"></div>		
+        <div><img src="{{ url_for('static', filename='img12.png') }}" alt="Image 12"></div>
+        <div><img src="{{ url_for('static', filename='img13.png') }}" alt="Image 13"></div>
+        <div><img src="{{ url_for('static', filename='img14.png') }}" alt="Image 14"></div>
+        <div><img src="{{ url_for('static', filename='img15.png') }}" alt="Image 15"></div>
+       <!-- <div><img src="{{ url_for('static', filename='img16.png') }}" alt="Image 16"></div>		        
+        <div><img src="{{ url_for('static', filename='img17.png') }}" alt="Image 17"></div>
+        <div><img src="{{ url_for('static', filename='img18.png') }}" alt="Image 18"></div>
+        <div><img src="{{ url_for('static', filename='img19.png') }}" alt="Image 19"></div>	
+		<div><img src="{{ url_for('static', filename='img20.png') }}" alt="Image 20"></div>	
+         -->
+      </div>
+    </div>
+  </div>
+  <!-- Barre de recherche -->
+  <div class="row mt-3">
+    <div class="col-md-6 offset-md-3">
+      <form action="{{ url_for('recommander') }}" method="post">
+        <div class="form-group">
+          <input type="text" class="form-control" id="titre_film" name="titre_film" placeholder="Entrez le titre d'un film">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full-width">Rechercher</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Résultats des recommandations -->
+  <div id="recommendations" class="row mt-4">
+    {% if recommandations is not none and not recommandations.empty %}
+      {% for film in recommandations.itertuples() %}
+        <div class="col-md-4 mb-3">
+          <!-- Détails du film -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ film.primaryTitle }}</h5>
+              <p class="card-text">Genre: {{ film.genres }}</p>
+              <p class="card-text">Note: {{ film.averageRating }} / Votes: {{ film.numVotes }}</p>
+              <p class="card-text">Score Cosinus: {{ film.score_cosinus }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% elif recherche_effectuee %}
+      <p>Aucune recommandation trouvée pour "{{ titre_film }}". Essayez un autre titre.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Script JavaScript pour le changement de thème -->
+<script>
+  function toggleTheme() {
+    var body = document.body;
+    body.classList.toggle("light-theme");
+    if(body.classList.contains("light-theme")) {
+      localStorage.setItem("theme", "light");
+    } else {
+      localStorage.setItem("theme", "dark");
+    }
+  }
+
+  // Appliquer le thème lors du chargement de la page
+  document.addEventListener("DOMContentLoaded", () => {
+    if(localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light-theme");
+    }
+  });
+</script>
+
+<!-- jQuery et jQuery UI pour l'auto-complétion -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<!-- Slick Carousel JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.carousel').slick({
+        slidesToShow: 8,
+        slidesToScroll: 8,
+        arrows: true,
+        infinite: false
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $("#titre_film").autocomplete({
+        source: "{{ url_for('autocomplete') }}", // Assurez-vous que cette URL est correcte
+        minLength: 2, // Commence l'auto-complétion après 2 caractères tapés
+        select: function(event, ui) {
+            // Action à réaliser lorsque vous sélectionnez un titre de film
+            console.log(ui.item.value);
+        }
+    });
+});
+</script>
+<BR><BR>
+<!-- Pied de page -->
+<footer class="text-center text-white" style="background-color: #000;">
+  <div class="text-center p-3">
+    <p>Ce code est un exemple de Machine Learning. Il utilise un modèle de voisinage le plus proche<BR>(Nearest Neighbors) pour recommander des films similaires en fonction de leurs caractéristiques. <BR>Il intègre également des techniques de prétraitement des données comme OneHotEncoding et la normalisation MinMax, <BR>essentielles dans le processus d'apprentissage automatique.</p>
+    <p>Base de données contenant 1,384,137 entrées.</p>
+    <p>@Sotoca-Online.com - Version 8 du 11/01/2024</p>
+  </div>
+</footer>
+
+</body>
+</html>
