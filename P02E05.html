@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Système de Recommandation de Films</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Style personnalisé -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #000; /* Fond noir */
+      color: #fff; /* Texte blanc */
+    }
+    .light-theme {
+      background-color: #fff; /* Fond blanc */
+      color: #000; /* Texte noir */
+    }
+    .custom-card .card-body {
+      padding: 1rem;
+      padding-bottom: 0.25rem; /* Réduit l'espace en bas */
+    }
+    .form-control {
+      background-color: #333;
+      border: none;
+      color: #fff;
+    }
+    .btn-primary {
+      background-color: #e50914;
+      border: none;
+    }
+    .card {
+      background-color: #333;
+      border: none;
+      max-height: 200px; /* Ajustez pour diminuer la hauteur des cartes */
+    }
+    .card-title {
+      font-size: 1.2rem;
+    }
+    .card-body {
+      padding: 15px;
+    }
+    .card {
+      min-height: 180px;
+    }
+	.legend {
+      color: #999; /* Couleur grise pour la légende */
+      font-size: 0.9rem; /* Petite taille de police */
+    }
+	.light-theme {
+	  background-color: #fff; /* Fond blanc */
+      color: #000; /* Texte noir */
+}
+
+
+  function toggleTheme() {
+  var body = document.body;
+  body.classList.toggle("light-theme"); // Ajoute ou enlève la classe light-theme
+}
+
+  function toggleTheme() {
+  var body = document.body;
+  body.classList.toggle("light-theme");
+  if(body.classList.contains("light-theme")) {
+    localStorage.setItem("theme", "light");
+  } else {
+    localStorage.setItem("theme", "dark");
+  }
+}
+
+// Appliquer le thème lors du chargement de la page
+document.addEventListener("DOMContentLoaded", () => {
+  if(localStorage.getItem("theme") === "light") {
+    document.body.classList.add("light-theme");
+  }
+});
+
+
+  </style>
+</head>
+<body>
+<button id="theme-toggle" onclick="toggleTheme()">Mode Jour/Nuit</button>
+
+
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Colonne pour le logo -->
+      <div class="col-md-4 d-flex align-items-center">
+        <a href="http://127.0.0.1:5000/">
+          <img src="{{ url_for('static', filename='logo.png') }}" alt="CineCorrèze" style="max-width: 100%; height: auto;">
+        </a>
+      </div>
+      <!-- Colonne pour le texte et le bandeau image -->
+      <div class="col-md-8">
+        <div>
+          <h1><BR><BR>Système de Recommandation de Films</h1>
+          <p>🌟 Découvrez des films sur mesure ! On cherche vos coups de cœur par genre, on adore les mêmes réalisateurs que vous et si on manque d'options, on vous propose d'autres pépites ! C'est parti ? 🎬</p>
+        </div>
+        <!-- Image en bandeau sous le texte -->
+        <img src="{{ url_for('static', filename='bandeau.png') }}" alt="Description de l'image" style="width: 100%; height: auto; display: block; margin-top: 20px;">
+      </div>
+    </div>
+    <!-- Barre de recherche -->
+    <div class="row mt-3">
+      <div class="col-md-6 offset-md-3">
+		<form action="/recommander" method="post">
+		  <div class="form-group">
+			<input type="text" class="form-control" name="titre_film" placeholder="Entrez le titre d'un film">
+		  </div>
+		  <button type="submit" class="btn btn-primary">Rechercher</button>
+		</form>
+      </div>
+    </div>
+
+
+
+<!-- Résultats des recommandations -->
+<div id="recommendations" class="row mt-4">
+  {% if recommandations is not none and not recommandations.empty %}
+    {% for film in recommandations.itertuples() %}
+      <div class="col-md-4 mb-3">
+        <!-- Détails du film -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ film.primaryTitle }}</h5>
+            <p class="card-text">Genre: {{ film.genres }}</p>
+            <p class="card-text">Note: {{ film.averageRating }}</p>
+            <p class="card-text">Votes: {{ film.numVotes }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>Aucune recommandation trouvée pour "{{ titre_film }}". Essayez un autre titre.</p>
+  {% endif %}
+</div>
+
+
+<BR>
+<!-- Script JavaScript pour le changement de thème -->
+<script>
+  function toggleTheme() {
+    var body = document.body;
+    body.classList.toggle("light-theme");
+    if(body.classList.contains("light-theme")) {
+      localStorage.setItem("theme", "light");
+    } else {
+      localStorage.setItem("theme", "dark");
+    }
+  }
+
+  // Appliquer le thème lors du chargement de la page
+  document.addEventListener("DOMContentLoaded", () => {
+    if(localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light-theme");
+    }
+  });
+</script>
+
+
